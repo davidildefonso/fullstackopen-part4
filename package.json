@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --verbose",
     "start": "node index.js",
     "dev": "nodemon index.js",
     "lint": "eslint ."
@@ -20,6 +20,10 @@
   "devDependencies": {
     "eslint": "^8.3.0",
     "eslint-plugin-react": "^7.27.1",
+    "jest": "^27.4.3",
     "nodemon": "^2.0.15"
+  },
+  "jest": {
+  	"testEnvironment": "node"
   }
 }
