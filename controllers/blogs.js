@@ -3,44 +3,33 @@ const Blog = require('../models/blog');
 
 
 
-blogsRouter.get('/', (request, response, next) => {	
-		
-	Blog.find({}).then(blogs => {
-		response.json(blogs);
-		
-	}).catch(error => next(error) );
+blogsRouter.get('/', async (request, response) => {			
+	const blogs = await Blog.find({});
+	response.json(blogs);	
 });
 
-blogsRouter.get('/:id', (request, response, next) => {
+blogsRouter.get('/:id', async  (request, response) => {
  
 
-	Blog.findById(request.params.id).then(note => {
-		response.json(note);
-	}).catch(error => next(error) );
+	const blog = await Blog.findById(request.params.id);
+	response.json(blog);
 
 
 });
 
 
-blogsRouter.delete('/:id', (request, response, next) => {
+blogsRouter.delete('/:id', async (request, response) => {
 
-	Blog.findById(request.params.id)
-		.then(blog => {
-			if(!blog){
-				return response.status(400).json({ 
-					error: 'blog not found' 
-				});
-			}				
-
-			Blog.findByIdAndRemove(request.params.id , function (err) {
-				if (err) return console.log(err);
-				response.status(204).end();
-			});
-
-		}).catch(error => next(error) );
-
-
-
+	const blog = await Blog.findById(request.params.id);
+	if(!blog){
+		return response.status(400).json({ 
+			error: 'blog not found' 
+		});
+	}	
+	Blog.findByIdAndRemove(request.params.id , function (err) {
+		if (err) return console.log(err);
+		response.status(204).end();
+	});
 
 
 });
@@ -48,43 +37,39 @@ blogsRouter.delete('/:id', (request, response, next) => {
 
 
 
-blogsRouter.post('/', (request, response, next) => {
+blogsRouter.post('/', async (request, response) => {
 
 
 	const blog = new Blog(request.body);
 
-	blog.save().then(savedBlog => {
-		response.status(201).json(savedBlog);
-	}).catch(error => next(error) );
+	const savedBlog = await blog.save();
+	response.status(201).json(savedBlog);
 
 });
 
 
 
-blogsRouter.put('/:id', (request, response, next) => {
+blogsRouter.put('/:id', async  (request, response) => {
 
 
 
-	Blog.findById(request.params.id)
-		.then(note => {
-			if(!note){
-				return response.status(400).json({ 
-					error: 'blog not found' 
-				});
-			}				
+	const blog = await Blog.findById(request.params.id);
+
+	if(!blog){
+		return response.status(400).json({ 
+			error: 'blog not found' 
+		});
+	}				
 
 
-			Blog.findByIdAndUpdate(
-				request.params.id,
-				request.body,
-				{new: true},
-				function (err, note) {
-					if (err) return console.log(err);
-					response.json(note);
-				});
-
-		}).catch(error => next(error) );
-			
+	Blog.findByIdAndUpdate(
+		request.params.id,
+		request.body,
+		{new: true},
+		function (err, note) {
+			if (err) return console.log(err);
+			response.json(note);
+		});
 
 });
 
