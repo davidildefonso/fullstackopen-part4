@@ -39,6 +39,9 @@ blogsRouter.delete('/:id', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
 
+	if(!request.body.title && !request.body.url) return response.status(400).end();
+
+	if(!request.body.likes) request.body.likes = 0;
 
 	const blog = new Blog(request.body);
 

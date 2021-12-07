@@ -21,6 +21,14 @@ beforeEach(async () => {
 	// await Promise.all(promiseArray);
 });
 
+test('blog unique identifier is called id instead of _id', async () => {
+	const blogsAtStart = await helper.blogsInDb();
+	const blogToView = blogsAtStart[0];
+	expect(blogToView.id).toBeDefined();
+});
+
+
+
 
 test('all blogs are returned', async () => {
 	const response = await api.get('/api/blogs');
@@ -60,6 +68,44 @@ test('a valid blog can be added', async () => {
 		'new title'
 	);
 });
+
+
+test('a valid blog can be added with default likes value 0 if missing in the body', async () => {
+	const newBlog = {
+		title: 'new title',
+		author: 'new author',
+		url: 'new url '
+	};
+
+	await api
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(201)
+		.expect('Content-Type', /application\/json/);
+
+	const blogsAtEnd = await helper.blogsInDb();
+	expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+
+	const likes = blogsAtEnd.map(r => r.likes);
+
+	expect(likes).toContain(0);
+});
+
+test('a  blog is not added if title and url is empty, response status code must be 400', async () => {
+	const newBlog = {
+		author: 'new author',
+		likes: 5
+	};
+
+	await api
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(400);
+
+	const blogsAtEnd = await helper.blogsInDb();
+	expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length );
+});
+
 
 
 test('a specific blog can be viewed', async () => {
