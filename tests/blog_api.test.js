@@ -169,6 +169,30 @@ test('a specific blog can be viewed', async () => {
 	expect(resultBlog.body).toEqual(processedBlogToView);
 });
 
+test('a specific blog can be commented', async () => {
+	const blogsAtStart = await helper.blogsInDb();
+	const newComment = {
+		content: 'this is a test comment',	
+	};
+
+	const blogToBeCommented = blogsAtStart[0];
+
+	await api
+		.post(`/api/blogs/${blogToBeCommented.id}/comments`)
+		.send(newComment)
+		.expect(201)
+		.expect('Content-Type', /application\/json/);
+
+	const blogsAtEnd = await helper.blogsInDb();
+	expect(blogsAtEnd).toHaveLength(blogsAtStart.length );
+	const blogAfterComment = blogsAtEnd.find(b => b.id === blogToBeCommented.id );
+
+	expect(blogAfterComment.comments).toHaveLength(1);
+	expect(blogAfterComment.comments).toContain('this is a test comment');
+
+});
+
+
 describe('when a user has created a blog', () => {
 
 	let token;

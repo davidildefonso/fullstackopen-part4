@@ -113,4 +113,39 @@ blogsRouter.put('/:id', async  (request, response) => {
 });
 
 
+blogsRouter.post('/:id/comments',   async (request, response) => {
+	const body = request.body;
+	if(!body.content ) return response.status(400).end();
+
+	try {
+
+		const blog = await Blog.findById(request.params.id);
+	
+		if(!blog){
+			return response.status(400).json({ 
+				error: 'blog not found' 
+			});
+		}				
+
+		
+		const commentedBlog =  await Blog.findByIdAndUpdate(
+			request.params.id,
+			{comments: blog.comments.concat(body.content)},
+			{new: true}
+		).populate('user', { name: 1, username : 1});
+	
+		response.status(201).json(commentedBlog);
+
+	} catch (error) {
+		console.log(error);
+		return response.status(400).json({ 
+			error: 'An error ocurred' 
+		});
+	}
+
+
+});
+
+
+
 module.exports = blogsRouter;
