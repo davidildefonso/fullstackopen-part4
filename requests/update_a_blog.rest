@@ -1,10 +1,8 @@
-PUT http://localhost:3003/api/blogs/61ab87c98c5e8152408f821a
+PUT http://localhost:3003/api/blogs/61b00c692d3b632345c22b3a
 content-type: application/json
 
 {
-    "title": "updated blog ",
-	"author": "el intercambio",
-	"url": "www.imthenew.com",
-	"likes": 0
+
+	"likes": 10
 
 }

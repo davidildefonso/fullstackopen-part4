@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs/ 
 content-type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hcmlvYnJvcyIsImlkIjoiNjFiMDBiZGMyZDNiNjMyMzQ1YzIyYjM0IiwiaWF0IjoxNjM4OTMyNzcwLCJleHAiOjE2Mzg5MzYzNzB9.rIsvxH9l2as0zS7lQGIWGJ1_ailrybljfTLN0ffVYdA
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhvbGFtdW5kbyIsImlkIjoiNjFiMDEzMzdjMDkyMzE5MjZmYTkzN2UwIiwiaWF0IjoxNjM5MjMxNjUwLCJleHAiOjE2MzkyMzUyNTB9.ntAW3H_Ny7J79q2b1owry8MXaZ4gwnhmytisXxOAC1Y
 
 {
     "title": "with middleware",

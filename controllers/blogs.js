@@ -21,7 +21,7 @@ blogsRouter.get('/:id', async  (request, response) => {
 });
 
 
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id',  async (request, response) => {
 
 	const decodedToken = jwt.verify(request.token, process.env.SECRET);
 
@@ -71,12 +71,15 @@ blogsRouter.post('/', middleware.userExtractor ,  async (request, response) => {
 	User.findByIdAndUpdate(
 		user._id,
 		{ $set: { blogs: user.blogs.concat(savedBlog._id)}},
-		(err, updatedBlog) => {				
-			response.status(201).json(updatedBlog);
+		(err, updatedBlog) => {		
+			console.log(err, updatedBlog);					
 		}
 	);	
 
 	
+	const populatedBlog = await Blog.findById(savedBlog._id).populate('user', { name: 1});
+	
+	response.status(201).json(populatedBlog);
 
 });
 
@@ -94,15 +97,18 @@ blogsRouter.put('/:id', async  (request, response) => {
 		});
 	}				
 
+	try {
+		const blog = await Blog.findByIdAndUpdate(
+			request.params.id,
+			request.body,
+			{new: true}
+		).populate('user', { name: 1, username : 1});
+		response.json(blog);
 
-	Blog.findByIdAndUpdate(
-		request.params.id,
-		request.body,
-		{new: true},
-		function (err, note) {
-			if (err) return console.log(err);
-			response.json(note);
-		});
+	} catch (error) {
+		console.log(error);
+	}
+	
 
 });
 

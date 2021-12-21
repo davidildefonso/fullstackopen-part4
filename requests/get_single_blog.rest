@@ -1,2 +1,2 @@
-PUT http://localhost:3003/api/blogs/61ab87c98c5e8152408f821a
+GET http://localhost:3003/api/blogs/61b4a262a4d2d8673d265156
 
